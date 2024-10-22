@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="pt-br">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Apache Parquet: Otimizando Big Data para Desenvolvedores Node.js</title>
+
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reset.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/night.min.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/monokai.min.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h1>Apache Parquet</h1>
+					<h3>Otimizando Big Data para Desenvolvedores Node.js</h3>
+					<p>
+						<small>Apresentado por [Seu Nome]</small>
+					</p>
+				</section>
+
+				<section>
+					<h2>Agenda</h2>
+					<ol>
+						<li>Introdução ao Apache Parquet</li>
+						<li>Arquitetura e Funcionamento</li>
+						<li>Vantagens para Big Data e Analytics</li>
+						<li>Parquet vs Outros Formatos</li>
+						<li>Integração com Node.js</li>
+						<li>Casos de Uso e Melhores Práticas</li>
+						<li>Demonstração Prática</li>
+						<li>Considerações de Performance</li>
+						<li>Ecossistema e Ferramentas</li>
+						<li>Q&A</li>
+					</ol>
+				</section>
+
+				<section>
+					<h2>1. Introdução ao Apache Parquet</h2>
+					<ul>
+						<li>Formato de armazenamento colunar</li>
+						<li>Desenvolvido pela Cloudera e Twitter</li>
+						<li>Parte do ecossistema Hadoop</li>
+						<li>Otimizado para consultas analíticas em grandes volumes de dados</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>2. Arquitetura e Funcionamento</h2>
+					<ul>
+						<li>Estrutura colunar</li>
+						<li>Compressão eficiente</li>
+						<li>Codificação de dados</li>
+						<li>Metadados e estatísticas</li>
+					</ul>
+					<pre><code class="hljs" data-trim data-line-numbers>
+// Exemplo de estrutura lógica
+{
+  "nome": ["Alice", "Bob", "Charlie"],
+  "idade": [30, 25, 35],
+  "cidade": ["São Paulo", "Rio", "Belo Horizonte"]
+}
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>3. Vantagens para Big Data e Analytics</h2>
+					<ul>
+						<li>Redução significativa do espaço de armazenamento</li>
+						<li>Melhoria na performance de consultas</li>
+						<li>Suporte a evolução de schema</li>
+						<li>Integração com ferramentas de Big Data (Spark, Hive, etc.)</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>4. Parquet vs Outros Formatos</h2>
+					<table>
+						<thead>
+							<tr>
+								<th>Característica</th>
+								<th>Parquet</th>
+								<th>CSV</th>
+								<th>JSON</th>
+								<th>Avro</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Formato</td>
+								<td>Colunar</td>
+								<td>Linha</td>
+								<td>Linha</td>
+								<td>Linha</td>
+							</tr>
+							<tr>
+								<td>Compressão</td>
+								<td>Excelente</td>
+								<td>Básica</td>
+								<td>Boa</td>
+								<td>Boa</td>
+							</tr>
+							<tr>
+								<td>Desempenho em Consultas</td>
+								<td>Excelente</td>
+								<td>Ruim</td>
+								<td>Médio</td>
+								<td>Bom</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section>
+					<h2>5. Integração com Node.js</h2>
+					<ul>
+						<li>Bibliotecas disponíveis: parquetjs, node-parquet</li>
+						<li>Leitura e escrita de arquivos Parquet</li>
+						<li>Integração com frameworks de Big Data</li>
+					</ul>
+					<pre><code class="hljs javascript" data-trim data-line-numbers>
+const parquet = require('parquetjs');
+
+const schema = new parquet.ParquetSchema({
+  name: { type: 'UTF8' },
+  age: { type: 'INT32' },
+  city: { type: 'UTF8' }
+});
+
+const writer = await parquet.ParquetWriter.openFile(schema, 'users.parquet');
+await writer.appendRow({name: 'Alice', age: 30, city: 'São Paulo'});
+await writer.close();
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>6. Casos de Uso e Melhores Práticas</h2>
+					<ul>
+						<li>Data Lakes e armazenamento de longo prazo</li>
+						<li>Análise de logs e eventos</li>
+						<li>ETL e processamento de dados</li>
+						<li>Integração com serviços de nuvem (S3, Azure Blob, etc.)</li>
+					</ul>
+					<p>Melhores Práticas:</p>
+					<ul>
+						<li>Escolha cuidadosa do schema</li>
+						<li>Particionamento adequado</li>
+						<li>Uso de compressão</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>7. Demonstração Prática</h2>
+					<p>Vamos criar um exemplo prático de leitura e escrita de dados Parquet em Node.js</p>
+					<pre><code class="hljs javascript" data-trim data-line-numbers>
+const parquet = require('parquetjs');
+const fs = require('fs');
+
+async function writeParquetFile() {
+  const schema = new parquet.ParquetSchema({
+    name: { type: 'UTF8' },
+    age: { type: 'INT32' },
+    city: { type: 'UTF8' }
+  });
+
+  const writer = await parquet.ParquetWriter.openFile(schema, 'users.parquet');
+
+  await writer.appendRow({name: 'Alice', age: 30, city: 'São Paulo'});
+  await writer.appendRow({name: 'Bob', age: 25, city: 'Rio'});
+  await writer.appendRow({name: 'Charlie', age: 35, city: 'Belo Horizonte'});
+
+  await writer.close();
+  console.log('Arquivo Parquet criado com sucesso!');
+}
+
+async function readParquetFile() {
+  const reader = await parquet.ParquetReader.openFile('users.parquet');
+  const cursor = reader.getCursor();
+  let record = null;
+  while (record = await cursor.next()) {
+    console.log(record);
+  }
+  await reader.close();
+}
+
+writeParquetFile().then(readParquetFile);
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>8. Considerações de Performance</h2>
+					<ul>
+						<li>Tamanho ideal de blocos e páginas</li>
+						<li>Escolha de codificação e compressão</li>
+						<li>Estratégias de particionamento</li>
+						<li>Otimização de consultas</li>
+					</ul>
+					<pre><code class="hljs javascript" data-trim data-line-numbers>
+const writerOptions = {
+  compression: 'SNAPPY',
+  rowGroupSize: 100000,
+  pageSize: 8192
+};
+
+const writer = await parquet.ParquetWriter.openFile(schema, 'optimized_users.parquet', writerOptions);
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>9. Ecossistema e Ferramentas</h2>
+					<ul>
+						<li>Apache Spark</li>
+						<li>Apache Hive</li>
+						<li>Presto</li>
+						<li>Apache Drill</li>
+						<li>Ferramentas de visualização (Tableau, Power BI)</li>
+					</ul>
+					<p>Integração com Node.js:</p>
+					<ul>
+						<li>Apache Arrow</li>
+						<li>Dremio</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Conclusão</h2>
+					<ul>
+						<li>Parquet é essencial para otimização de Big Data</li>
+						<li>Oferece vantagens significativas em armazenamento e performance</li>
+						<li>Integração com Node.js abre novas possibilidades</li>
+						<li>Importante considerar casos de uso e otimizações</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Q&A</h2>
+					<p>Perguntas?</p>
+				</section>
+
+				<section>
+					<h2>Recursos Adicionais</h2>
+					<ul>
+						<li><a href="https://parquet.apache.org/" target="_blank">Documentação oficial do Apache Parquet</a></li>
+						<li><a href="https://github.com/apache/parquet-format" target="_blank">GitHub do Apache Parquet</a></li>
+						<li><a href="https://github.com/ironSource/parquetjs" target="_blank">ParquetJS no GitHub</a></li>
+						<li><a href="https://arrow.apache.org/" target="_blank">Apache Arrow</a></li>
+					</ul>
+				</section>
+
+			</div>
+		</div>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/notes/notes.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/markdown/markdown.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/plugin/highlight/highlight.min.js"></script>
+		<script>
+			Reveal.initialize({
+				hash: true,
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+			});
+		</script>
+	</body>
+</html>
